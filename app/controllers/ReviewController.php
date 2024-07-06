@@ -28,7 +28,15 @@ class ReviewController
                 'rate' => $rate,
                 'comment' => $comment,
             ];
-            if ($this->model->addreview($data)) {
+            $rateexist=$this->model->rateexist($data["doctorid"],$data["patiantid"]);
+            if ($rateexist) {
+                $done=$this->model->updatereview($data);
+            } else {
+                $done=$this->model->addreview($data);
+
+            }
+    
+            if ($done) {
                 header("content-type: application/json");
                 $a = ['message' => 'add review done'];
                 echo json_encode($a);

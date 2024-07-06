@@ -62,8 +62,9 @@ switch ($request) {
     case BASE_PATH . 'deleteappoint?id=' . $_GET['id']:
         $appointcontroller->deleteappoint($_GET['id']);
         break;
-    case BASE_PATH . 'addtreatment' . $_GET['id']:
-
+    case BASE_PATH . 'addtreatment?id=' . $_GET['id']:
+        $appointcontroller->editstatus($_GET['id']);
+        break;
     
     
 

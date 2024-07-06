@@ -54,6 +54,14 @@ class AppointModel
 
 
     }
+    public function editstatus($id){
+        $data=[
+            'status'=>1
+        ];
+        $this->db->where('id', $id);
+        return $this->db->update('appointments', $data);
+
+    }
 }
 
 

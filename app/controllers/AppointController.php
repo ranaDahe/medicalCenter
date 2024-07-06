@@ -2,10 +2,12 @@
 namespace app\controllers;
 
 require __DIR__ . '/../models/AppointModel.php';
-// require __DIR__ . '/../models/PatiantModel.php';
-use app\models\AppointModel;
-// use app\models\PatiantModel;
 
+use app\models\AppointModel;
+require __DIR__.'/../controllers/TreatmentController.php';
+require __DIR__.'/../controllers/PatiantController.php';
+use app\controllers\TreatmentController;
+use app\controllers\PatiantController;
 class AppointController{
     private $model;
     private $patiantmodel;
@@ -15,6 +17,9 @@ class AppointController{
     {
 
         $this->model = new AppointModel($db);
+        $this->treatmentcontroller = new TreatmentController($db);
+        $this->patiantcontroller = new PatiantController($db);
+
 
        
     }
@@ -30,8 +35,10 @@ class AppointController{
                 'date' => $date,
                 'time' => $time,
             ];
-
-            // if($this->patiantmodel->pa);
+$exist=$this->patiantcontroller->patiantIsExist($data);
+            if($exist==false){
+                addPatiant();
+            }
             if($this->model->appointisempty($date, $time, $doctorid)){
             if ($this->model->addappoint($data)) {
                 header("content-type: application/json");
@@ -63,16 +70,21 @@ class AppointController{
             header("content-type: application/json");
             $a = ['message' => 'delete appoint done'];
             echo json_encode($a);
-            // echo "User deleted successfully!";
-            // header('Location:' . BASE_PATH);
+           
         } else {
             header("content-type: application/json");
             $a = ['message' => 'delete appoint failed'];
             echo json_encode($a);
         }
-        
     }
-}
+    
+    public function editstatus($id){
+        $this->model->editstatus($id);
+        $this->treatmentcontroller->addTreatment();
+
+
+    }}
+
 
 
 ?>
