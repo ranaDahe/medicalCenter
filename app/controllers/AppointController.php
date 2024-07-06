@@ -23,6 +23,12 @@ class AppointController{
 
        
     }
+    public function jsonresponse($data)
+    {
+        header("content-type: application/json");
+        echo json_encode($data);
+        exit;
+    }
     public function addappoint($data){
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $patiantid = $_POST["patiant-id"];
@@ -41,40 +47,36 @@ $exist=$this->patiantcontroller->patiantIsExist($data);
             }
             if($this->model->appointisempty($date, $time, $doctorid)){
             if ($this->model->addappoint($data)) {
-                header("content-type: application/json");
                 $a = ['message' => 'add appoint done'];
-                echo json_encode($a);
+                $this->jsonresponse($a);
             } else {
-                header("content-type: application/json");
                 $a = ['message' => 'add appoint failed'];
-                echo json_encode($a);
+                $this->jsonresponse($a);
+
             }
         }}
 
     }
     public function showdoctorappoint($id){
         $appoints = $this->model->showdoctorappoint($id);
-        header("content-type: application/json");
-        echo json_encode($appoints);
+        $this->jsonresponse($appoints);
 
 
     }
     public function showpatiantappoint($id){
         $appoints = $this->model->showpatiantappoint($id);
-        header("content-type: application/json");
-        echo json_encode($appoints);
+        $this->jsonresponse($appoints);
     }
    
     public function deleteappoint($id){
         if ($this->model->deleteappoint($id)) {
-            header("content-type: application/json");
             $a = ['message' => 'delete appoint done'];
-            echo json_encode($a);
-           
+            $this->jsonresponse($a);
+
         } else {
-            header("content-type: application/json");
             $a = ['message' => 'delete appoint failed'];
-            echo json_encode($a);
+            $this->jsonresponse($a);
+
         }
     }
     

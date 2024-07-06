@@ -14,6 +14,12 @@ class ReviewController
 
         $this->model = new ReviewModel($db);
     }
+    public function jsonresponse($data)
+    {
+        header("content-type: application/json");
+        echo json_encode($data);
+        exit;
+    }
     public function addreview()
     {
 
@@ -28,22 +34,20 @@ class ReviewController
                 'rate' => $rate,
                 'comment' => $comment,
             ];
-            $rateexist=$this->model->rateexist($data["doctorid"],$data["patiantid"]);
+            $rateexist = $this->model->rateexist($data["doctorid"], $data["patiantid"]);
             if ($rateexist) {
-                $done=$this->model->updatereview($data);
+                $done = $this->model->updatereview($data);
             } else {
-                $done=$this->model->addreview($data);
+                $done = $this->model->addreview($data);
 
             }
-    
+
             if ($done) {
-                header("content-type: application/json");
                 $a = ['message' => 'add review done'];
-                echo json_encode($a);
+                $this->jsonresponse($a);
             } else {
-                header("content-type: application/json");
                 $a = ['message' => 'add review failed'];
-                echo json_encode($a);
+                $this->jsonresponse($a);
             }
         }
 
@@ -53,17 +57,20 @@ class ReviewController
         $rates = $this->model->getreviews($id);
         $rate = 0;
         // var_dump($rates);
-        for($i=0;$i<count($rates);$i++){
-            $rate+=$rates[$i]["rate"];
+        for ($i = 0; $i < count($rates); $i++) {
+            $rate += $rates[$i]["rate"];
 
         }
-        // foreach ($rates as $v) {
-        //     $rate += $v;
-        // }
-        $count=count($rates);
-        $average=$rate/$count;
-        echo $average;
-    }}
+
+        $count = count($rates);
+        $average = $rate / $count;
+        $data = [
+            "doctorid" => $id,
+            "averagerate" => $average
+        ];
+        $this->jsonresponse($data);
+    }
+}
 
 // }
 

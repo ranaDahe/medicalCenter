@@ -14,6 +14,12 @@ class AdminController
 
         $this->model = new AdminModel($db);
     }
+    public function jsonresponse($data)
+    {
+        header("content-type: application/json");
+        echo json_encode($data);
+        exit;
+    }
     public function login()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -22,10 +28,8 @@ class AdminController
             $admins = $this->model->getadmin();
             var_dump($admins);
             if ($email == $admins[0]["email"] && $password == $admins[0]["password"]) {
-                header("content-type: application/json");
                 $a = ['message' => 'welcome admin'];
-                echo json_encode($a);
-                // echo "hi ";
+              $this->jsonresponse($a);
 
             }
         }
